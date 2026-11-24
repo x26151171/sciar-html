@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sciar Tips · My Weekly Tips (Alpha)</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --ink: #0f172a;
+      --muted: #475569;
+      --border: #cbd5e1;
+      --accent: #0f766e;
+      --accent-soft: #f0fdfa;
+      --warn-bg: #fffbeb;
+      --warn-border: #f59e0b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+      font-size: 16px;
+    }
+    .wrap {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    header { margin-bottom: 16px; }
+    .badge {
+      display: inline-block;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid #99f6e4;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      margin-bottom: 6px;
+    }
+    h1 { font-size: 22px; margin: 0 0 4px; }
+    h2 { font-size: 17px; margin: 0 0 10px; }
+    h3 { font-size: 15px; margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 14px; margin: 0; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    select, textarea, button {
+      width: 100%;
+      font-size: 16px;
+      border-radius: 8px;
+      font-family: inherit;
+    }
+    select, textarea {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--ink);
+    }
+    button {
+      margin-top: 10px;
+      padding: 12px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .stat {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+    }
+    .stat-k { font-size: 12px; color: var(--muted); display: block; }
+    .stat-v { font-size: 19px; font-weight: 700; margin-top: 2px; display: block; }
+    .source-tag {
+      margin-top: 10px;
+      padding: 8px 10px;
+      background: #f1f5f9;
+      border-radius: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      word-break: break-word;
+    }
+    .notice {
+      background: var(--warn-bg);
+      border-left: 4px solid var(--warn-border);
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin: 10px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    th, td {
+      text-align: left;
+      padding: 8px 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--muted); font-weight: 600; }
+    .trace-item {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 8px;
+      background: var(--bg);
+      font-size: 14px;
+    }
+    .trace-meta { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .nav-link {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 14px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <span class="badge">Sciar Tips · Staff View Alpha (Fictional Pilot)</span>
+      <h1>My Weekly Tips</h1>
+      <p class="sub">Plain-English tip breakdown for Halloran's pilot (12 weeks). Designed for phone screens.</p>
+      <a class="nav-link" href="index.html">← Back to Sciar Tips overview</a>
+    </header>
+
+    <section class="card" aria-label="Select your profile">
+      <label for="staffSelect">1. Choose your name (your view only)</label>
+      <select id="staffSelect"></select>
+      <p class="sub" style="margin-top:8px;">
+        Privacy rule: You see only your own hours and payouts. Colleague role averages appear only for roles with 3 or more staff.
+      </p>
+      <div class="source-tag" id="dataOriginTag"></div>
+    </section>
+
+    <section class="card" aria-label="Your summary and hidden calculation details">
+      <h2 id="personHeading">Your 12-Week Summary</h2>
+      <div class="grid" id="summaryGrid"></div>
+      <div class="notice" id="ruleBox"></div>
+      <div class="source-tag" id="summarySource"></div>
+    </section>
+
+    <section class="card" aria-label="Colleague group benchmarks">
+      <h2>Team Benchmarks (Groups of 3+ Staff Only)</h2>
+      <p class="sub">
+        To protect privacy, roles with 1 or 2 people (floor manager, bar, kitchen porter) are not listed here so individuals cannot be identified.
+      </p>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Role (n staff)</th>
+              <th>Rows</th>
+              <th>Avg €/total hr</th>
+              <th>% hrs after 23:00</th>
+            </tr>
+          </thead>
+          <tbody id="groupBody"></tbody>
+        </table>
+      </div>
+      <div class="source-tag" id="groupSource"></div>
+    </section>
+
+    <section class="card" aria-label="Weekly payout breakdown">
+      <h2>Your Weekly Breakdown</h2>
+      <p class="sub">Every Monday payout from your logged rota hours.</p>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Wk</th>
+              <th>Total hrs</th>
+              <th>After 23:00</th>
+              <th>Points</th>
+              <th>Pool</th>
+              <th>Your pay</th>
+            </tr>
+          </thead>
+          <tbody id="weeklyBody"></tbody>
+        </table>
+      </div>
+      <div class="source-tag" id="weeklySource"></div>
+    </section>
+
+    <section class="card" aria-label="Raise a concern">
+      <h2>Raise a Concern Privately</h2>
+      <p class="sub">
+        If your hours, late shifts, or payout look wrong, write a note below. Simple English is fine.
+      </p>
+      <div class="notice">
+        <strong>Honest Alpha Notice (Simulated Storage):</strong> In this alpha, your concern is saved <strong>only in this browser's local storage</strong> so you keep a dated record. Neither Declan nor Niamh can see it here, and it is not sent to a live server.
+      </div>
+      <label for="concernText">What happened?</label>
+      <textarea id="concernText" rows="3" placeholder="Example: Week 10 I worked 20 hours after 23:00 and want to check how points were counted."></textarea>
+      <button id="submitConcern" type="button">Save Concern to My Record</button>
+      <div id="concernList" style="margin-top:12px;"></div>
+    </section>
+  </div>
+
+  <script src="data/payouts.js"></script>
+  <script src="data/takings.js"></script>
+  <script id="embeddedPayouts" type="application/json">
+[
+  {"week":"1","week_start":"2028-08-14","staff_id":"S01","first_name":"Niamh","role":"floor manager","hours":"47.5","hours_after_2300":"1.5","points_per_hour":"1.5","points":"69.0","week_pool_eur":"2779.67","tip_payout_eur":"574.90"},
+  {"week":"1","week_start":"2028-08-14","staff_id":"S02","first_name":"Chloe","role":"server","hours":"30.0","hours_after_2300":"1.0","points_per_hour":"1.0","points":"29.0","week_pool_eur":"2779.67","tip_payout_eur":"241.62"},
+  {"week":"1","week_start":"2028-08-14","staff_id":"S03","first_name":"Marek","role":"server","hours":"32.5","hours_after_2300":"1.0","points_per_hour":"1.0","points":"31.5","week_pool_eur":"2779.67","tip_payout_eur":"262.45"},
+  {"week":"1","week_start":"2028-08-14","staff_id":"S04","first_name":"Aisling","role":"server","hours":"22.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"22.5","week_pool_eur":"2779.67","tip_payout_eur":"187.47"},
+  {"week":"1","week_start":"2028-08-14","staff_id":"S05","first_name":"Jun","role":"server","hours":"26.0","hours_after_2300":"2.5","points_per_hour":"1.0","points":"23.5","week_pool_eur":"2779.67","tip_payout_eur":"195.80"},
+  {"week":"1","week_start":"2028-08-14","staff_id":"S06","first_name":"Sofia","role":"server","hours":"25.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"25.5","week_pool_eur":"2779.67","tip_payout_eur":"212.46"},
+  {"week":"1","week_start":"2028-08-14","staff_id":"S07","first_name":"Liam","role":"bar","hours":"32.0","hours_after_2300":"1.0","points_per_hour":"1.0","points":"31.0","week_pool_eur":"2779.67","tip_payout_eur":"258.29"},
+  {"week":"1","week_start":"2028-08-14","staff_id":"S08","first_name":"Oksana","role":"bar","hours":"30.5","hours_after_2300":"3.0","points_per_hour":"1.0","points":"27.5","week_pool_eur":"2779.67","tip_payout_eur":"229.13"},
+  {"week":"1","week_start":"2028-08-14","staff_id":"S09","first_name":"Tadhg","role":"chef","hours":"41.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"20.5","week_pool_eur":"2779.67","tip_payout_eur":"170.80"},
+  {"week":"1","week_start":"2028-08-14","staff_id":"S10","first_name":"Grace","role":"chef","hours":"40.5","hours_after_2300":"0.0","points_per_hour":"0.5","points":"20.25","week_pool_eur":"2779.67","tip_payout_eur":"168.72"},
+  {"week":"1","week_start":"2028-08-14","staff_id":"S11","first_name":"Ibrahim","role":"chef","hours":"41.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"20.5","week_pool_eur":"2779.67","tip_payout_eur":"170.80"},
+  {"week":"1","week_start":"2028-08-14","staff_id":"S12","first_name":"Rafael","role":"kitchen porter","hours":"40.0","hours_after_2300":"11.5","points_per_hour":"0.25","points":"7.12","week_pool_eur":"2779.67","tip_payout_eur":"59.32"},
+  {"week":"1","week_start":"2028-08-14","staff_id":"S13","first_name":"Mehmet","role":"kitchen porter","hours":"35.5","hours_after_2300":"12.5","points_per_hour":"0.25","points":"5.75","week_pool_eur":"2779.67","tip_payout_eur":"47.91"},
+  {"week":"2","week_start":"2028-08-21","staff_id":"S01","first_name":"Niamh","role":"floor manager","hours":"43.0","hours_after_2300":"1.5","points_per_hour":"1.5","points":"62.25","week_pool_eur":"2666.34","tip_payout_eur":"493.43"},
+  {"week":"2","week_start":"2028-08-21","staff_id":"S02","first_name":"Chloe","role":"server","hours":"28.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"28.0","week_pool_eur":"2666.34","tip_payout_eur":"221.94"},
+  {"week":"2","week_start":"2028-08-21","staff_id":"S03","first_name":"Marek","role":"server","hours":"31.0","hours_after_2300":"1.0","points_per_hour":"1.0","points":"30.0","week_pool_eur":"2666.34","tip_payout_eur":"237.80"},
+  {"week":"2","week_start":"2028-08-21","staff_id":"S04","first_name":"Aisling","role":"server","hours":"23.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"23.5","week_pool_eur":"2666.34","tip_payout_eur":"186.27"},
+  {"week":"2","week_start":"2028-08-21","staff_id":"S05","first_name":"Jun","role":"server","hours":"26.5","hours_after_2300":"1.0","points_per_hour":"1.0","points":"25.5","week_pool_eur":"2666.34","tip_payout_eur":"202.13"},
+  {"week":"2","week_start":"2028-08-21","staff_id":"S06","first_name":"Sofia","role":"server","hours":"26.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"26.0","week_pool_eur":"2666.34","tip_payout_eur":"206.09"},
+  {"week":"2","week_start":"2028-08-21","staff_id":"S07","first_name":"Liam","role":"bar","hours":"36.0","hours_after_2300":"3.5","points_per_hour":"1.0","points":"32.5","week_pool_eur":"2666.34","tip_payout_eur":"257.61"},
+  {"week":"2","week_start":"2028-08-21","staff_id":"S08","first_name":"Oksana","role":"bar","hours":"33.5","hours_after_2300":"3.5","points_per_hour":"1.0","points":"30.0","week_pool_eur":"2666.34","tip_payout_eur":"237.80"},
+  {"week":"2","week_start":"2028-08-21","staff_id":"S09","first_name":"Tadhg","role":"chef","hours":"46.5","hours_after_2300":"0.0","points_per_hour":"0.5","points":"23.25","week_pool_eur":"2666.34","tip_payout_eur":"184.29"},
+  {"week":"2","week_start":"2028-08-21","staff_id":"S10","first_name":"Grace","role":"chef","hours":"44.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"22.0","week_pool_eur":"2666.34","tip_payout_eur":"174.38"},
+  {"week":"2","week_start":"2028-08-21","staff_id":"S11","first_name":"Ibrahim","role":"chef","hours":"41.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"20.5","week_pool_eur":"2666.34","tip_payout_eur":"162.49"},
+  {"week":"2","week_start":"2028-08-21","staff_id":"S12","first_name":"Rafael","role":"kitchen porter","hours":"38.5","hours_after_2300":"13.0","points_per_hour":"0.25","points":"6.38","week_pool_eur":"2666.34","tip_payout_eur":"50.57"},
+  {"week":"2","week_start":"2028-08-21","staff_id":"S13","first_name":"Mehmet","role":"kitchen porter","hours":"38.0","hours_after_2300":"12.0","points_per_hour":"0.25","points":"6.5","week_pool_eur":"2666.34","tip_payout_eur":"51.52"},
+  {"week":"3","week_start":"2028-08-28","staff_id":"S01","first_name":"Niamh","role":"floor manager","hours":"44.5","hours_after_2300":"1.0","points_per_hour":"1.5","points":"65.25","week_pool_eur":"2882.03","tip_payout_eur":"559.48"},
+  {"week":"3","week_start":"2028-08-28","staff_id":"S02","first_name":"Chloe","role":"server","hours":"28.5","hours_after_2300":"1.0","points_per_hour":"1.0","points":"27.5","week_pool_eur":"2882.03","tip_payout_eur":"235.80"},
+  {"week":"3","week_start":"2028-08-28","staff_id":"S03","first_name":"Marek","role":"server","hours":"30.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"30.0","week_pool_eur":"2882.03","tip_payout_eur":"257.23"},
+  {"week":"3","week_start":"2028-08-28","staff_id":"S04","first_name":"Aisling","role":"server","hours":"26.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"26.0","week_pool_eur":"2882.03","tip_payout_eur":"222.93"},
+  {"week":"3","week_start":"2028-08-28","staff_id":"S05","first_name":"Jun","role":"server","hours":"26.5","hours_after_2300":"1.0","points_per_hour":"1.0","points":"25.5","week_pool_eur":"2882.03","tip_payout_eur":"218.65"},
+  {"week":"3","week_start":"2028-08-28","staff_id":"S06","first_name":"Sofia","role":"server","hours":"27.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"27.0","week_pool_eur":"2882.03","tip_payout_eur":"231.51"},
+  {"week":"3","week_start":"2028-08-28","staff_id":"S07","first_name":"Liam","role":"bar","hours":"33.5","hours_after_2300":"2.5","points_per_hour":"1.0","points":"31.0","week_pool_eur":"2882.03","tip_payout_eur":"265.81"},
+  {"week":"3","week_start":"2028-08-28","staff_id":"S08","first_name":"Oksana","role":"bar","hours":"30.5","hours_after_2300":"2.5","points_per_hour":"1.0","points":"28.0","week_pool_eur":"2882.03","tip_payout_eur":"240.08"},
+  {"week":"3","week_start":"2028-08-28","staff_id":"S09","first_name":"Tadhg","role":"chef","hours":"41.5","hours_after_2300":"0.0","points_per_hour":"0.5","points":"20.75","week_pool_eur":"2882.03","tip_payout_eur":"177.92"},
+  {"week":"3","week_start":"2028-08-28","staff_id":"S10","first_name":"Grace","role":"chef","hours":"39.5","hours_after_2300":"0.0","points_per_hour":"0.5","points":"19.75","week_pool_eur":"2882.03","tip_payout_eur":"169.34"},
+  {"week":"3","week_start":"2028-08-28","staff_id":"S11","first_name":"Ibrahim","role":"chef","hours":"41.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"20.5","week_pool_eur":"2882.03","tip_payout_eur":"175.78"},
+  {"week":"3","week_start":"2028-08-28","staff_id":"S12","first_name":"Rafael","role":"kitchen porter","hours":"43.5","hours_after_2300":"11.0","points_per_hour":"0.25","points":"8.12","week_pool_eur":"2882.03","tip_payout_eur":"69.62"},
+  {"week":"3","week_start":"2028-08-28","staff_id":"S13","first_name":"Mehmet","role":"kitchen porter","hours":"38.0","hours_after_2300":"11.0","points_per_hour":"0.25","points":"6.75","week_pool_eur":"2882.03","tip_payout_eur":"57.88"},
+  {"week":"4","week_start":"2028-09-04","staff_id":"S01","first_name":"Niamh","role":"floor manager","hours":"42.5","hours_after_2300":"1.0","points_per_hour":"1.5","points":"62.25","week_pool_eur":"2718.97","tip_payout_eur":"497.99"},
+  {"week":"4","week_start":"2028-09-04","staff_id":"S02","first_name":"Chloe","role":"server","hours":"27.5","hours_after_2300":"2.0","points_per_hour":"1.0","points":"25.5","week_pool_eur":"2718.97","tip_payout_eur":"203.99"},
+  {"week":"4","week_start":"2028-09-04","staff_id":"S03","first_name":"Marek","role":"server","hours":"32.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"32.0","week_pool_eur":"2718.97","tip_payout_eur":"255.99"},
+  {"week":"4","week_start":"2028-09-04","staff_id":"S04","first_name":"Aisling","role":"server","hours":"23.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"23.0","week_pool_eur":"2718.97","tip_payout_eur":"184.00"},
+  {"week":"4","week_start":"2028-09-04","staff_id":"S05","first_name":"Jun","role":"server","hours":"28.0","hours_after_2300":"0.5","points_per_hour":"1.0","points":"27.5","week_pool_eur":"2718.97","tip_payout_eur":"219.99"},
+  {"week":"4","week_start":"2028-09-04","staff_id":"S06","first_name":"Sofia","role":"server","hours":"27.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"27.0","week_pool_eur":"2718.97","tip_payout_eur":"215.99"},
+  {"week":"4","week_start":"2028-09-04","staff_id":"S07","first_name":"Liam","role":"bar","hours":"36.0","hours_after_2300":"1.5","points_per_hour":"1.0","points":"34.5","week_pool_eur":"2718.97","tip_payout_eur":"275.99"},
+  {"week":"4","week_start":"2028-09-04","staff_id":"S08","first_name":"Oksana","role":"bar","hours":"30.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"30.5","week_pool_eur":"2718.97","tip_payout_eur":"243.99"},
+  {"week":"4","week_start":"2028-09-04","staff_id":"S09","first_name":"Tadhg","role":"chef","hours":"47.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"23.5","week_pool_eur":"2718.97","tip_payout_eur":"188.00"},
+  {"week":"4","week_start":"2028-09-04","staff_id":"S10","first_name":"Grace","role":"chef","hours":"41.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"20.5","week_pool_eur":"2718.97","tip_payout_eur":"164.00"},
+  {"week":"4","week_start":"2028-09-04","staff_id":"S11","first_name":"Ibrahim","role":"chef","hours":"40.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"20.0","week_pool_eur":"2718.97","tip_payout_eur":"160.00"},
+  {"week":"4","week_start":"2028-09-04","staff_id":"S12","first_name":"Rafael","role":"kitchen porter","hours":"41.0","hours_after_2300":"13.5","points_per_hour":"0.25","points":"6.88","week_pool_eur":"2718.97","tip_payout_eur":"55.04"},
+  {"week":"4","week_start":"2028-09-04","staff_id":"S13","first_name":"Mehmet","role":"kitchen porter","hours":"37.5","hours_after_2300":"10.5","points_per_hour":"0.25","points":"6.75","week_pool_eur":"2718.97","tip_payout_eur":"54.00"},
+  {"week":"5","week_start":"2028-09-11","staff_id":"S01","first_name":"Niamh","role":"floor manager","hours":"43.5","hours_after_2300":"1.5","points_per_hour":"1.5","points":"63.0","week_pool_eur":"2526.82","tip_payout_eur":"471.67"},
+  {"week":"5","week_start":"2028-09-11","staff_id":"S02","first_name":"Chloe","role":"server","hours":"31.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"31.5","week_pool_eur":"2526.82","tip_payout_eur":"235.84"},
+  {"week":"5","week_start":"2028-09-11","staff_id":"S03","first_name":"Marek","role":"server","hours":"31.0","hours_after_2300":"2.0","points_per_hour":"1.0","points":"29.0","week_pool_eur":"2526.82","tip_payout_eur":"217.12"},
+  {"week":"5","week_start":"2028-09-11","staff_id":"S04","first_name":"Aisling","role":"server","hours":"23.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"23.0","week_pool_eur":"2526.82","tip_payout_eur":"172.20"},
+  {"week":"5","week_start":"2028-09-11","staff_id":"S05","first_name":"Jun","role":"server","hours":"26.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"26.0","week_pool_eur":"2526.82","tip_payout_eur":"194.66"},
+  {"week":"5","week_start":"2028-09-11","staff_id":"S06","first_name":"Sofia","role":"server","hours":"28.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"28.0","week_pool_eur":"2526.82","tip_payout_eur":"209.63"},
+  {"week":"5","week_start":"2028-09-11","staff_id":"S07","first_name":"Liam","role":"bar","hours":"33.5","hours_after_2300":"4.0","points_per_hour":"1.0","points":"29.5","week_pool_eur":"2526.82","tip_payout_eur":"220.86"},
+  {"week":"5","week_start":"2028-09-11","staff_id":"S08","first_name":"Oksana","role":"bar","hours":"30.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"30.0","week_pool_eur":"2526.82","tip_payout_eur":"224.61"},
+  {"week":"5","week_start":"2028-09-11","staff_id":"S09","first_name":"Tadhg","role":"chef","hours":"48.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"24.0","week_pool_eur":"2526.82","tip_payout_eur":"179.68"},
+  {"week":"5","week_start":"2028-09-11","staff_id":"S10","first_name":"Grace","role":"chef","hours":"42.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"21.0","week_pool_eur":"2526.82","tip_payout_eur":"157.22"},
+  {"week":"5","week_start":"2028-09-11","staff_id":"S11","first_name":"Ibrahim","role":"chef","hours":"39.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"19.5","week_pool_eur":"2526.82","tip_payout_eur":"145.99"},
+  {"week":"5","week_start":"2028-09-11","staff_id":"S12","first_name":"Rafael","role":"kitchen porter","hours":"40.0","hours_after_2300":"11.5","points_per_hour":"0.25","points":"7.12","week_pool_eur":"2526.82","tip_payout_eur":"53.31"},
+  {"week":"5","week_start":"2028-09-11","staff_id":"S13","first_name":"Mehmet","role":"kitchen porter","hours":"35.0","hours_after_2300":"11.5","points_per_hour":"0.25","points":"5.88","week_pool_eur":"2526.82","tip_payout_eur":"44.02"},
+  {"week":"6","week_start":"2028-09-18","staff_id":"S01","first_name":"Niamh","role":"floor manager","hours":"47.0","hours_after_2300":"0.5","points_per_hour":"1.5","points":"69.75","week_pool_eur":"2576.34","tip_payout_eur":"519.36"},
+  {"week":"6","week_start":"2028-09-18","staff_id":"S02","first_name":"Chloe","role":"server","hours":"31.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"31.5","week_pool_eur":"2576.34","tip_payout_eur":"234.55"},
+  {"week":"6","week_start":"2028-09-18","staff_id":"S03","first_name":"Marek","role":"server","hours":"34.5","hours_after_2300":"0.5","points_per_hour":"1.0","points":"34.0","week_pool_eur":"2576.34","tip_payout_eur":"253.17"},
+  {"week":"6","week_start":"2028-09-18","staff_id":"S04","first_name":"Aisling","role":"server","hours":"23.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"23.5","week_pool_eur":"2576.34","tip_payout_eur":"174.98"},
+  {"week":"6","week_start":"2028-09-18","staff_id":"S05","first_name":"Jun","role":"server","hours":"26.0","hours_after_2300":"1.0","points_per_hour":"1.0","points":"25.0","week_pool_eur":"2576.34","tip_payout_eur":"186.15"},
+  {"week":"6","week_start":"2028-09-18","staff_id":"S06","first_name":"Sofia","role":"server","hours":"23.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"23.5","week_pool_eur":"2576.34","tip_payout_eur":"174.98"},
+  {"week":"6","week_start":"2028-09-18","staff_id":"S07","first_name":"Liam","role":"bar","hours":"36.0","hours_after_2300":"3.0","points_per_hour":"1.0","points":"33.0","week_pool_eur":"2576.34","tip_payout_eur":"245.72"},
+  {"week":"6","week_start":"2028-09-18","staff_id":"S08","first_name":"Oksana","role":"bar","hours":"29.0","hours_after_2300":"1.0","points_per_hour":"1.0","points":"28.0","week_pool_eur":"2576.34","tip_payout_eur":"208.49"},
+  {"week":"6","week_start":"2028-09-18","staff_id":"S09","first_name":"Tadhg","role":"chef","hours":"42.5","hours_after_2300":"1.0","points_per_hour":"0.5","points":"20.75","week_pool_eur":"2576.34","tip_payout_eur":"154.51"},
+  {"week":"6","week_start":"2028-09-18","staff_id":"S10","first_name":"Grace","role":"chef","hours":"44.5","hours_after_2300":"0.0","points_per_hour":"0.5","points":"22.25","week_pool_eur":"2576.34","tip_payout_eur":"165.68"},
+  {"week":"6","week_start":"2028-09-18","staff_id":"S11","first_name":"Ibrahim","role":"chef","hours":"40.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"20.0","week_pool_eur":"2576.34","tip_payout_eur":"148.92"},
+  {"week":"6","week_start":"2028-09-18","staff_id":"S12","first_name":"Rafael","role":"kitchen porter","hours":"40.0","hours_after_2300":"12.0","points_per_hour":"0.25","points":"7.0","week_pool_eur":"2576.34","tip_payout_eur":"52.12"},
+  {"week":"6","week_start":"2028-09-18","staff_id":"S13","first_name":"Mehmet","role":"kitchen porter","hours":"39.5","hours_after_2300":"8.5","points_per_hour":"0.25","points":"7.75","week_pool_eur":"2576.34","tip_payout_eur":"57.71"},
+  {"week":"7","week_start":"2028-09-25","staff_id":"S01","first_name":"Niamh","role":"floor manager","hours":"43.0","hours_after_2300":"0.5","points_per_hour":"1.5","points":"63.75","week_pool_eur":"2625.28","tip_payout_eur":"493.69"},
+  {"week":"7","week_start":"2028-09-25","staff_id":"S02","first_name":"Chloe","role":"server","hours":"32.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"32.0","week_pool_eur":"2625.28","tip_payout_eur":"247.81"},
+  {"week":"7","week_start":"2028-09-25","staff_id":"S03","first_name":"Marek","role":"server","hours":"28.0","hours_after_2300":"0.5","points_per_hour":"1.0","points":"27.5","week_pool_eur":"2625.28","tip_payout_eur":"212.97"},
+  {"week":"7","week_start":"2028-09-25","staff_id":"S04","first_name":"Aisling","role":"server","hours":"22.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"22.5","week_pool_eur":"2625.28","tip_payout_eur":"174.24"},
+  {"week":"7","week_start":"2028-09-25","staff_id":"S05","first_name":"Jun","role":"server","hours":"29.0","hours_after_2300":"1.0","points_per_hour":"1.0","points":"28.0","week_pool_eur":"2625.28","tip_payout_eur":"216.84"},
+  {"week":"7","week_start":"2028-09-25","staff_id":"S06","first_name":"Sofia","role":"server","hours":"26.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"26.0","week_pool_eur":"2625.28","tip_payout_eur":"201.35"},
+  {"week":"7","week_start":"2028-09-25","staff_id":"S07","first_name":"Liam","role":"bar","hours":"32.0","hours_after_2300":"0.5","points_per_hour":"1.0","points":"31.5","week_pool_eur":"2625.28","tip_payout_eur":"243.94"},
+  {"week":"7","week_start":"2028-09-25","staff_id":"S08","first_name":"Oksana","role":"bar","hours":"29.5","hours_after_2300":"1.0","points_per_hour":"1.0","points":"28.5","week_pool_eur":"2625.28","tip_payout_eur":"220.71"},
+  {"week":"7","week_start":"2028-09-25","staff_id":"S09","first_name":"Tadhg","role":"chef","hours":"47.5","hours_after_2300":"0.0","points_per_hour":"0.5","points":"23.75","week_pool_eur":"2625.28","tip_payout_eur":"183.92"},
+  {"week":"7","week_start":"2028-09-25","staff_id":"S10","first_name":"Grace","role":"chef","hours":"43.5","hours_after_2300":"0.0","points_per_hour":"0.5","points":"21.75","week_pool_eur":"2625.28","tip_payout_eur":"168.44"},
+  {"week":"7","week_start":"2028-09-25","staff_id":"S11","first_name":"Ibrahim","role":"chef","hours":"39.5","hours_after_2300":"0.0","points_per_hour":"0.5","points":"19.75","week_pool_eur":"2625.28","tip_payout_eur":"152.95"},
+  {"week":"7","week_start":"2028-09-25","staff_id":"S12","first_name":"Rafael","role":"kitchen porter","hours":"40.5","hours_after_2300":"12.0","points_per_hour":"0.25","points":"7.12","week_pool_eur":"2625.28","tip_payout_eur":"55.14"},
+  {"week":"7","week_start":"2028-09-25","staff_id":"S13","first_name":"Mehmet","role":"kitchen porter","hours":"37.5","hours_after_2300":"10.0","points_per_hour":"0.25","points":"6.88","week_pool_eur":"2625.28","tip_payout_eur":"53.28"},
+  {"week":"8","week_start":"2028-10-02","staff_id":"S01","first_name":"Niamh","role":"floor manager","hours":"46.0","hours_after_2300":"0.5","points_per_hour":"1.5","points":"68.25","week_pool_eur":"2599.51","tip_payout_eur":"511.29"},
+  {"week":"8","week_start":"2028-10-02","staff_id":"S02","first_name":"Chloe","role":"server","hours":"27.5","hours_after_2300":"0.5","points_per_hour":"1.0","points":"27.0","week_pool_eur":"2599.51","tip_payout_eur":"202.27"},
+  {"week":"8","week_start":"2028-10-02","staff_id":"S03","first_name":"Marek","role":"server","hours":"33.0","hours_after_2300":"1.5","points_per_hour":"1.0","points":"31.5","week_pool_eur":"2599.51","tip_payout_eur":"235.98"},
+  {"week":"8","week_start":"2028-10-02","staff_id":"S04","first_name":"Aisling","role":"server","hours":"19.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"19.5","week_pool_eur":"2599.51","tip_payout_eur":"146.08"},
+  {"week":"8","week_start":"2028-10-02","staff_id":"S05","first_name":"Jun","role":"server","hours":"34.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"34.0","week_pool_eur":"2599.51","tip_payout_eur":"254.71"},
+  {"week":"8","week_start":"2028-10-02","staff_id":"S06","first_name":"Sofia","role":"server","hours":"28.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"28.0","week_pool_eur":"2599.51","tip_payout_eur":"209.76"},
+  {"week":"8","week_start":"2028-10-02","staff_id":"S07","first_name":"Liam","role":"bar","hours":"34.0","hours_after_2300":"3.0","points_per_hour":"1.0","points":"31.0","week_pool_eur":"2599.51","tip_payout_eur":"232.23"},
+  {"week":"8","week_start":"2028-10-02","staff_id":"S08","first_name":"Oksana","role":"bar","hours":"33.0","hours_after_2300":"1.5","points_per_hour":"1.0","points":"31.5","week_pool_eur":"2599.51","tip_payout_eur":"235.98"},
+  {"week":"8","week_start":"2028-10-02","staff_id":"S09","first_name":"Tadhg","role":"chef","hours":"44.5","hours_after_2300":"0.5","points_per_hour":"0.5","points":"22.0","week_pool_eur":"2599.51","tip_payout_eur":"164.81"},
+  {"week":"8","week_start":"2028-10-02","staff_id":"S10","first_name":"Grace","role":"chef","hours":"43.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"21.5","week_pool_eur":"2599.51","tip_payout_eur":"161.06"},
+  {"week":"8","week_start":"2028-10-02","staff_id":"S11","first_name":"Ibrahim","role":"chef","hours":"37.5","hours_after_2300":"0.0","points_per_hour":"0.5","points":"18.75","week_pool_eur":"2599.51","tip_payout_eur":"140.46"},
+  {"week":"8","week_start":"2028-10-02","staff_id":"S12","first_name":"Rafael","role":"kitchen porter","hours":"39.0","hours_after_2300":"11.5","points_per_hour":"0.25","points":"6.88","week_pool_eur":"2599.51","tip_payout_eur":"51.54"},
+  {"week":"8","week_start":"2028-10-02","staff_id":"S13","first_name":"Mehmet","role":"kitchen porter","hours":"40.0","hours_after_2300":"11.5","points_per_hour":"0.25","points":"7.12","week_pool_eur":"2599.51","tip_payout_eur":"53.34"},
+  {"week":"9","week_start":"2028-10-09","staff_id":"S01","first_name":"Niamh","role":"floor manager","hours":"42.0","hours_after_2300":"0.0","points_per_hour":"1.5","points":"63.0","week_pool_eur":"2757.18","tip_payout_eur":"513.15"},
+  {"week":"9","week_start":"2028-10-09","staff_id":"S02","first_name":"Chloe","role":"server","hours":"28.5","hours_after_2300":"1.0","points_per_hour":"1.0","points":"27.5","week_pool_eur":"2757.18","tip_payout_eur":"224.00"},
+  {"week":"9","week_start":"2028-10-09","staff_id":"S03","first_name":"Marek","role":"server","hours":"34.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"34.0","week_pool_eur":"2757.18","tip_payout_eur":"276.94"},
+  {"week":"9","week_start":"2028-10-09","staff_id":"S04","first_name":"Aisling","role":"server","hours":"24.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"24.5","week_pool_eur":"2757.18","tip_payout_eur":"199.56"},
+  {"week":"9","week_start":"2028-10-09","staff_id":"S05","first_name":"Jun","role":"server","hours":"29.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"29.5","week_pool_eur":"2757.18","tip_payout_eur":"240.29"},
+  {"week":"9","week_start":"2028-10-09","staff_id":"S06","first_name":"Sofia","role":"server","hours":"28.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"28.5","week_pool_eur":"2757.18","tip_payout_eur":"232.14"},
+  {"week":"9","week_start":"2028-10-09","staff_id":"S07","first_name":"Liam","role":"bar","hours":"34.0","hours_after_2300":"0.5","points_per_hour":"1.0","points":"33.5","week_pool_eur":"2757.18","tip_payout_eur":"272.87"},
+  {"week":"9","week_start":"2028-10-09","staff_id":"S08","first_name":"Oksana","role":"bar","hours":"31.5","hours_after_2300":"3.0","points_per_hour":"1.0","points":"28.5","week_pool_eur":"2757.18","tip_payout_eur":"232.14"},
+  {"week":"9","week_start":"2028-10-09","staff_id":"S09","first_name":"Tadhg","role":"chef","hours":"45.5","hours_after_2300":"1.0","points_per_hour":"0.5","points":"22.25","week_pool_eur":"2757.18","tip_payout_eur":"181.23"},
+  {"week":"9","week_start":"2028-10-09","staff_id":"S10","first_name":"Grace","role":"chef","hours":"41.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"20.5","week_pool_eur":"2757.18","tip_payout_eur":"166.98"},
+  {"week":"9","week_start":"2028-10-09","staff_id":"S11","first_name":"Ibrahim","role":"chef","hours":"40.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"20.0","week_pool_eur":"2757.18","tip_payout_eur":"162.91"},
+  {"week":"9","week_start":"2028-10-09","staff_id":"S12","first_name":"Rafael","role":"kitchen porter","hours":"48.5","hours_after_2300":"21.5","points_per_hour":"0.25","points":"6.75","week_pool_eur":"2757.18","tip_payout_eur":"54.98"},
+  {"week":"10","week_start":"2028-10-16","staff_id":"S01","first_name":"Niamh","role":"floor manager","hours":"44.5","hours_after_2300":"1.5","points_per_hour":"1.5","points":"64.5","week_pool_eur":"2600.38","tip_payout_eur":"492.94"},
+  {"week":"10","week_start":"2028-10-16","staff_id":"S02","first_name":"Chloe","role":"server","hours":"29.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"29.5","week_pool_eur":"2600.38","tip_payout_eur":"225.46"},
+  {"week":"10","week_start":"2028-10-16","staff_id":"S03","first_name":"Marek","role":"server","hours":"35.5","hours_after_2300":"1.0","points_per_hour":"1.0","points":"34.5","week_pool_eur":"2600.38","tip_payout_eur":"263.67"},
+  {"week":"10","week_start":"2028-10-16","staff_id":"S04","first_name":"Aisling","role":"server","hours":"29.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"29.5","week_pool_eur":"2600.38","tip_payout_eur":"225.46"},
+  {"week":"10","week_start":"2028-10-16","staff_id":"S05","first_name":"Jun","role":"server","hours":"29.0","hours_after_2300":"0.5","points_per_hour":"1.0","points":"28.5","week_pool_eur":"2600.38","tip_payout_eur":"217.81"},
+  {"week":"10","week_start":"2028-10-16","staff_id":"S06","first_name":"Sofia","role":"server","hours":"24.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"24.0","week_pool_eur":"2600.38","tip_payout_eur":"183.42"},
+  {"week":"10","week_start":"2028-10-16","staff_id":"S07","first_name":"Liam","role":"bar","hours":"31.0","hours_after_2300":"2.0","points_per_hour":"1.0","points":"29.0","week_pool_eur":"2600.38","tip_payout_eur":"221.63"},
+  {"week":"10","week_start":"2028-10-16","staff_id":"S08","first_name":"Oksana","role":"bar","hours":"31.0","hours_after_2300":"2.5","points_per_hour":"1.0","points":"28.5","week_pool_eur":"2600.38","tip_payout_eur":"217.81"},
+  {"week":"10","week_start":"2028-10-16","staff_id":"S09","first_name":"Tadhg","role":"chef","hours":"47.5","hours_after_2300":"1.0","points_per_hour":"0.5","points":"23.25","week_pool_eur":"2600.38","tip_payout_eur":"177.69"},
+  {"week":"10","week_start":"2028-10-16","staff_id":"S10","first_name":"Grace","role":"chef","hours":"42.5","hours_after_2300":"0.0","points_per_hour":"0.5","points":"21.25","week_pool_eur":"2600.38","tip_payout_eur":"162.40"},
+  {"week":"10","week_start":"2028-10-16","staff_id":"S11","first_name":"Ibrahim","role":"chef","hours":"38.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"19.0","week_pool_eur":"2600.38","tip_payout_eur":"145.21"},
+  {"week":"10","week_start":"2028-10-16","staff_id":"S12","first_name":"Rafael","role":"kitchen porter","hours":"55.0","hours_after_2300":"20.0","points_per_hour":"0.25","points":"8.75","week_pool_eur":"2600.38","tip_payout_eur":"66.87"},
+  {"week":"11","week_start":"2028-10-23","staff_id":"S01","first_name":"Niamh","role":"floor manager","hours":"46.5","hours_after_2300":"0.0","points_per_hour":"1.5","points":"69.75","week_pool_eur":"2516.52","tip_payout_eur":"513.06"},
+  {"week":"11","week_start":"2028-10-23","staff_id":"S02","first_name":"Chloe","role":"server","hours":"33.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"33.5","week_pool_eur":"2516.52","tip_payout_eur":"246.41"},
+  {"week":"11","week_start":"2028-10-23","staff_id":"S03","first_name":"Marek","role":"server","hours":"32.0","hours_after_2300":"0.5","points_per_hour":"1.0","points":"31.5","week_pool_eur":"2516.52","tip_payout_eur":"231.70"},
+  {"week":"11","week_start":"2028-10-23","staff_id":"S04","first_name":"Aisling","role":"server","hours":"22.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"22.0","week_pool_eur":"2516.52","tip_payout_eur":"161.82"},
+  {"week":"11","week_start":"2028-10-23","staff_id":"S05","first_name":"Jun","role":"server","hours":"27.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"27.5","week_pool_eur":"2516.52","tip_payout_eur":"202.28"},
+  {"week":"11","week_start":"2028-10-23","staff_id":"S06","first_name":"Sofia","role":"server","hours":"25.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"25.0","week_pool_eur":"2516.52","tip_payout_eur":"183.89"},
+  {"week":"11","week_start":"2028-10-23","staff_id":"S07","first_name":"Liam","role":"bar","hours":"34.5","hours_after_2300":"1.0","points_per_hour":"1.0","points":"33.5","week_pool_eur":"2516.52","tip_payout_eur":"246.41"},
+  {"week":"11","week_start":"2028-10-23","staff_id":"S08","first_name":"Oksana","role":"bar","hours":"33.0","hours_after_2300":"3.0","points_per_hour":"1.0","points":"30.0","week_pool_eur":"2516.52","tip_payout_eur":"220.67"},
+  {"week":"11","week_start":"2028-10-23","staff_id":"S09","first_name":"Tadhg","role":"chef","hours":"43.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"21.5","week_pool_eur":"2516.52","tip_payout_eur":"158.15"},
+  {"week":"11","week_start":"2028-10-23","staff_id":"S10","first_name":"Grace","role":"chef","hours":"41.5","hours_after_2300":"0.0","points_per_hour":"0.5","points":"20.75","week_pool_eur":"2516.52","tip_payout_eur":"152.63"},
+  {"week":"11","week_start":"2028-10-23","staff_id":"S11","first_name":"Ibrahim","role":"chef","hours":"39.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"19.5","week_pool_eur":"2516.52","tip_payout_eur":"143.44"},
+  {"week":"11","week_start":"2028-10-23","staff_id":"S12","first_name":"Rafael","role":"kitchen porter","hours":"51.0","hours_after_2300":"20.5","points_per_hour":"0.25","points":"7.62","week_pool_eur":"2516.52","tip_payout_eur":"56.05"},
+  {"week":"12","week_start":"2028-10-30","staff_id":"S01","first_name":"Niamh","role":"floor manager","hours":"43.5","hours_after_2300":"2.0","points_per_hour":"1.5","points":"62.25","week_pool_eur":"2505.09","tip_payout_eur":"452.01"},
+  {"week":"12","week_start":"2028-10-30","staff_id":"S02","first_name":"Chloe","role":"server","hours":"30.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"30.5","week_pool_eur":"2505.09","tip_payout_eur":"221.46"},
+  {"week":"12","week_start":"2028-10-30","staff_id":"S03","first_name":"Marek","role":"server","hours":"32.5","hours_after_2300":"0.5","points_per_hour":"1.0","points":"32.0","week_pool_eur":"2505.09","tip_payout_eur":"232.36"},
+  {"week":"12","week_start":"2028-10-30","staff_id":"S04","first_name":"Aisling","role":"server","hours":"25.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"25.5","week_pool_eur":"2505.09","tip_payout_eur":"185.16"},
+  {"week":"12","week_start":"2028-10-30","staff_id":"S05","first_name":"Jun","role":"server","hours":"26.5","hours_after_2300":"1.0","points_per_hour":"1.0","points":"25.5","week_pool_eur":"2505.09","tip_payout_eur":"185.16"},
+  {"week":"12","week_start":"2028-10-30","staff_id":"S06","first_name":"Sofia","role":"server","hours":"30.0","hours_after_2300":"0.0","points_per_hour":"1.0","points":"30.0","week_pool_eur":"2505.09","tip_payout_eur":"217.83"},
+  {"week":"12","week_start":"2028-10-30","staff_id":"S07","first_name":"Liam","role":"bar","hours":"37.5","hours_after_2300":"1.0","points_per_hour":"1.0","points":"36.5","week_pool_eur":"2505.09","tip_payout_eur":"265.03"},
+  {"week":"12","week_start":"2028-10-30","staff_id":"S08","first_name":"Oksana","role":"bar","hours":"31.5","hours_after_2300":"0.0","points_per_hour":"1.0","points":"31.5","week_pool_eur":"2505.09","tip_payout_eur":"228.73"},
+  {"week":"12","week_start":"2028-10-30","staff_id":"S09","first_name":"Tadhg","role":"chef","hours":"43.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"21.5","week_pool_eur":"2505.09","tip_payout_eur":"156.11"},
+  {"week":"12","week_start":"2028-10-30","staff_id":"S10","first_name":"Grace","role":"chef","hours":"45.5","hours_after_2300":"0.0","points_per_hour":"0.5","points":"22.75","week_pool_eur":"2505.09","tip_payout_eur":"165.19"},
+  {"week":"12","week_start":"2028-10-30","staff_id":"S11","first_name":"Ibrahim","role":"chef","hours":"39.0","hours_after_2300":"0.0","points_per_hour":"0.5","points":"19.5","week_pool_eur":"2505.09","tip_payout_eur":"141.59"},
+  {"week":"12","week_start":"2028-10-30","staff_id":"S12","first_name":"Rafael","role":"kitchen porter","hours":"50.5","hours_after_2300":"20.5","points_per_hour":"0.25","points":"7.5","week_pool_eur":"2505.09","tip_payout_eur":"54.46"}
+]
+  </script>
+  <script>
+    function loadFallbackScript(src) {
+      return new Promise(function (resolve) {
+        var s = document.createElement("script");
+        s.src = src;
+        s.onload = function () { resolve(true); };
+        s.onerror = function () { resolve(false); };
+        document.head.appendChild(s);
+      });
+    }
+
+    function el(tag, className, text) {
+      var node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined && text !== null) node.textContent = text;
+      return node;
+    }
+
+    async function initApp() {
+      var dataOrigin = "data/payouts.js (external)";
+      if (typeof PAYOUTS === "undefined") {
+        var okRoot = await loadFallbackScript("payouts.js");
+        if (okRoot && typeof PAYOUTS !== "undefined") {
+          dataOrigin = "payouts.js (external)";
+        } else {
+          var rawJson = document.getElementById("embeddedPayouts").textContent;
+          window.PAYOUTS = JSON.parse(rawJson);
+          dataOrigin = "embedded pack copy of payouts.js / payouts.csv (152 rows)";
+        }
+      }
+      if (typeof TAKINGS === "undefined") {
+        await loadFallbackScript("takings.js");
+      }
+
+      document.getElementById("dataOriginTag").textContent =
+        "Data source: " + dataOrigin + " · rows loaded = " + PAYOUTS.length;
+
+      var rows = PAYOUTS.map(function (r) {
+        return {
+          week: Number(r.week),
+          week_start: r.week_start,
+          staff_id: r.staff_id,
+          first_name: r.first_name,
+          role: r.role,
+          hours: Number(r.hours),
+          hours_after_2300: Number(r.hours_after_2300),
+          points_per_hour: Number(r.points_per_hour),
+          points: Number(r.points),
+          week_pool_eur: Number(r.week_pool_eur),
+          tip_payout_eur: Number(r.tip_payout_eur)
+        };
+      });
+
+      var staffMap = new Map();
+      rows.forEach(function (r) {
+        if (!staffMap.has(r.staff_id)) {
+          staffMap.set(r.staff_id, { staff_id: r.staff_id, first_name: r.first_name, role: r.role });
+        }
+      });
+      var staffList = Array.from(staffMap.values()).sort(function (a, b) {
+        return a.staff_id.localeCompare(b.staff_id);
+      });
+
+      var staffSelect = document.getElementById("staffSelect");
+      staffList.forEach(function (s) {
+        var opt = document.createElement("option");
+        opt.value = s.staff_id;
+        opt.textContent = s.first_name + " (" + s.role + ")";
+        if (s.staff_id === "S12") opt.selected = true;
+        staffSelect.appendChild(opt);
+      });
+
+      function renderGroupBenchmarks() {
+        var byRole = {};
+        rows.forEach(function (r) {
+          if (!byRole[r.role]) {
+            byRole[r.role] = { role: r.role, staffIds: new Set(), rowCount: 0, hours: 0, after23: 0, payout: 0 };
+          }
+          byRole[r.role].staffIds.add(r.staff_id);
+          byRole[r.role].rowCount += 1;
+          byRole[r.role].hours += r.hours;
+          byRole[r.role].after23 += r.hours_after_2300;
+          byRole[r.role].payout += r.tip_payout_eur;
+        });
+
+        var tbody = document.getElementById("groupBody");
+        tbody.textContent = "";
+        Object.values(byRole).filter(function (g) { return g.staffIds.size >= 3; }).forEach(function (g) {
+          var tr = el("tr");
+          tr.appendChild(el("td", null, g.role + " (n=" + g.staffIds.size + ")"));
+          tr.appendChild(el("td", null, String(g.rowCount)));
+          tr.appendChild(el("td", null, "€" + (g.payout / g.hours).toFixed(2)));
+          tr.appendChild(el("td", null, ((g.after23 / g.hours) * 100).toFixed(2) + "%"));
+          tbody.appendChild(tr);
+        });
+
+        document.getElementById("groupSource").textContent =
+          "Source: payouts.csv / payouts.js (" + dataOrigin + "), filter: distinct staff_id per role >= 3 (server n=5, rows=60; chef n=3, rows=36).";
+      }
+
+      function storageKey(staffId) {
+        return "sciar_alpha_concerns_" + staffId;
+      }
+
+      function renderConcerns(staffId, firstName) {
+        var listEl = document.getElementById("concernList");
+        listEl.textContent = "";
+        var saved = [];
+        try {
+          saved = JSON.parse(localStorage.getItem(storageKey(staffId)) || "[]");
+        } catch (e) {
+          saved = [];
+        }
+
+        if (saved.length === 0) {
+          listEl.appendChild(el("p", "sub", "No saved concerns in this browser for " + firstName + " yet."));
+          return;
+        }
+
+        listEl.appendChild(el("h3", null, "Your Saved Concern Trace (" + saved.length + ")"));
+        saved.forEach(function (item, idx) {
+          var box = el("div", "trace-item");
+          box.appendChild(el("div", "trace-meta", "Trace #" + (idx + 1) + " · " + item.timestamp + " · Stored locally in your browser"));
+          box.appendChild(el("div", null, item.text));
+          listEl.appendChild(box);
+        });
+      }
+
+      function renderStaff(staffId) {
+        var myRows = rows.filter(function (r) { return r.staff_id === staffId; })
+          .sort(function (a, b) { return a.week - b.week; });
+        if (!myRows.length) return;
+
+        var person = myRows[0];
+        var totalHours = myRows.reduce(function (s, r) { return s + r.hours; }, 0);
+        var totalAfter23 = myRows.reduce(function (s, r) { return s + r.hours_after_2300; }, 0);
+        var countedHours = totalHours - totalAfter23;
+        var totalPoints = myRows.reduce(function (s, r) { return s + r.points; }, 0);
+        var totalPayout = myRows.reduce(function (s, r) { return s + r.tip_payout_eur; }, 0);
+        var eurPerTotalHr = (totalPayout / totalHours).toFixed(2);
+        var pctAfter23 = ((totalAfter23 / totalHours) * 100).toFixed(2);
+
+        document.getElementById("personHeading").textContent =
+          person.first_name + "'s 12-Week Summary (" + person.role + ")";
+
+        var grid = document.getElementById("summaryGrid");
+        grid.textContent = "";
+        var stats = [
+          ["Total Tip Payout", "€" + totalPayout.toFixed(2)],
+          ["Tips per Total Hour", "€" + eurPerTotalHr + "/hr"],
+          ["Hours After 23:00 (0 pts)", totalAfter23.toFixed(1) + "h (" + pctAfter23 + "%)"],
+          ["Counted Hours × Rate", countedHours.toFixed(1) + "h × " + person.points_per_hour]
+        ];
+        stats.forEach(function (pair) {
+          var box = el("div", "stat");
+          box.appendChild(el("span", "stat-k", pair[0]));
+          box.appendChild(el("span", "stat-v", pair[1]));
+          grid.appendChild(box);
+        });
+
+        var ruleBox = document.getElementById("ruleBox");
+        ruleBox.textContent =
+          "How your payout is calculated (hidden in text alerts): Your role rate is " +
+          person.points_per_hour + " points/hour. Hours worked after 23:00 earn 0 points. Out of your " +
+          totalHours.toFixed(1) + " total hours, " + totalAfter23.toFixed(1) +
+          " were after 23:00, leaving " + countedHours.toFixed(1) +
+          " counted hours (" + totalPoints.toFixed(2) + " total points).";
+
+        document.getElementById("summarySource").textContent =
+          "Source: payouts.csv / payouts.js (" + dataOrigin + "), filter: staff_id = \"" + staffId + "\" (" + person.first_name + "), weeks 1 to 12, count = " + myRows.length + " rows.";
+
+        var tbody = document.getElementById("weeklyBody");
+        tbody.textContent = "";
+        myRows.forEach(function (r) {
+          var tr = el("tr");
+          tr.appendChild(el("td", null, "W" + r.week));
+          tr.appendChild(el("td", null, r.hours.toFixed(1)));
+          tr.appendChild(el("td", null, r.hours_after_2300.toFixed(1)));
+          tr.appendChild(el("td", null, r.points.toFixed(2)));
+          tr.appendChild(el("td", null, "€" + r.week_pool_eur.toFixed(2)));
+          var payTd = el("td");
+          payTd.appendChild(el("strong", null, "€" + r.tip_payout_eur.toFixed(2)));
+          tr.appendChild(payTd);
+          tbody.appendChild(tr);
+        });
+
+        document.getElementById("weeklySource").textContent =
+          "Source: payouts.csv / payouts.js (" + dataOrigin + "), filter: staff_id = \"" + staffId + "\", count = " + myRows.length + " rows.";
+
+        renderConcerns(staffId, person.first_name);
+      }
+
+      staffSelect.addEventListener("change", function () {
+        renderStaff(staffSelect.value);
+      });
+
+      document.getElementById("submitConcern").addEventListener("click", function () {
+        var staffId = staffSelect.value;
+        var person = staffList.find(function (s) { return s.staff_id === staffId; });
+        var box = document.getElementById("concernText");
+        var text = box.value.trim();
+        if (!text) return;
+
+        var saved = [];
+        try {
+          saved = JSON.parse(localStorage.getItem(storageKey(staffId)) || "[]");
+        } catch (e) {
+          saved = [];
+        }
+        saved.unshift({
+          timestamp: new Date().toISOString().replace("T", " ").slice(0, 16) + " UTC",
+          text: text
+        });
+        localStorage.setItem(storageKey(staffId), JSON.stringify(saved));
+        box.value = "";
+        renderConcerns(staffId, person ? person.first_name : staffId);
+      });
+
+      renderGroupBenchmarks();
+      renderStaff(staffSelect.value);
+    }
+
+    initApp();
+  </script>
+</body>
+</html>
