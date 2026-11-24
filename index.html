@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sciar Tips · Pilot Reporting & Staff View Alpha</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --ink: #0f172a;
+      --muted: #475569;
+      --border: #cbd5e1;
+      --accent: #0f766e;
+      --accent-dark: #115e59;
+      --accent-soft: #f0fdfa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+    .pill {
+      display: inline-block;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid #99f6e4;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 32px;
+      line-height: 1.2;
+      margin: 0 0 12px;
+    }
+    .lead {
+      font-size: 18px;
+      color: var(--muted);
+      margin: 0 0 24px;
+    }
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 15px;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .btn-primary:hover { background: var(--accent-dark); }
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--ink);
+      border: 1px solid var(--border);
+    }
+    .claims {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .claim-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .claim-num {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .claim-card h2 {
+      font-size: 19px;
+      margin: 0 0 8px;
+    }
+    .claim-card p {
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+    .footnote {
+      font-size: 12px;
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .signup-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .signup-box h2 {
+      font-size: 20px;
+      margin: 0 0 6px;
+    }
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    input {
+      flex: 1 1 220px;
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+    }
+    button {
+      padding: 11px 18px;
+      border-radius: 8px;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    #signupStatus {
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
+    footer {
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <span class="pill">Sciar Tips · Alpha · For Independent Restaurant Owners</span>
+    <h1>Clearer tip reporting for restaurant teams.</h1>
+    <p class="lead">
+      Built for <strong>independent restaurant owners</strong> reviewing how card terminal tips and house service charges were recorded across our 12-week pilot.
+    </p>
+
+    <div class="cta-row">
+      <a class="btn btn-primary" href="https://x26151171.github.io/sciar--app/index.html">Open Staff View Alpha →</a>
+      <a class="btn btn-secondary" href="mailto:hello@sciar.example?subject=Sciar%20Tips%20Alpha%20Enquiry">Email hello@sciar.example</a>
+    </div>
+
+    <section class="claims" aria-label="Three sourced claims">
+      <article class="claim-card">
+        <div class="claim-num">Claim 1 · Pilot Card Tips vs. House Service Charge</div>
+        <h2>Card terminal tips (€31,754.13) were pooled separately from house service charges (€9,004.69).</h2>
+        <p>
+          Across the 12-week pilot, total card terminal tips were €31,754.13 and weekly staff payouts summed to €31,754.09 after cent rounding, while 12.5% service charges paid to the house totalled €9,004.69 across 65 opening days.
+        </p>
+        <div class="footnote">
+          Source: data/takings.csv (all 72 rows, weeks 1–12: sum card_tips_eur = €31,754.13; service_charge_paid_to = "house", n = 65 rows = €9,004.69) and data/payouts.csv (all 152 rows, weeks 1–12: sum tip_payout_eur = €31,754.09).
+        </div>
+      </article>
+
+      <article class="claim-card">
+        <div class="claim-num">Claim 2 · Mobile Staff View &amp; Group Privacy</div>
+        <h2>The staff view alpha shows individual hours, post-23:00 cut-offs, and role benchmarks only for groups of 3 or more staff.</h2>
+        <p>
+          Designed for phone screens, app.html displays an individual staff member's hours, hours after 23:00 (which earn 0 points under the pilot rule), and points calculation while omitting single- or two-person roles from group comparisons.
+        </p>
+        <div class="footnote">
+          Source: app.html alpha, README.md (split rule), and data/payouts.js (n = 152 rows; eligible groups of 3+ staff: server n = 5, chef n = 3).
+        </div>
+      </article>
+
+      <article class="claim-card">
+        <div class="claim-num">Claim 3 · Browser-Stored Concern Trace</div>
+        <h2>The alpha includes a mobile concern form that saves a local timestamped trace for the user.</h2>
+        <p>
+          Staff using app.html can write a concern and see a dated record saved locally in their own browser (simulated storage in this alpha, not sent to a live server or shared with managers).
+        </p>
+        <div class="footnote">
+          Source: app.html alpha (browser localStorage trace) informed by messages/01-rafael.md and messages/03-niamh.md.
+        </div>
+      </article>
+    </section>
+
+    <section class="signup-box" aria-label="Contact request">
+      <h2>Request information about Sciar Tips</h2>
+      <p style="margin:0;color:var(--muted);font-size:14px;">
+        Enter your email to prepare a message to <strong>hello@sciar.example</strong>, or use the mail link above.
+      </p>
+      <form id="pilotForm" class="form-row">
+        <input id="ownerEmail" type="email" required placeholder="you@restaurant.example" aria-label="Owner email address">
+        <button type="submit">Prepare Email Draft</button>
+      </form>
+      <div id="signupStatus" role="status"></div>
+    </section>
+
+    <footer>
+      <strong>Fictional Teaching Case Note:</strong> Sciar Ltd, Halloran's (Manor Street, Stoneybatter, Dublin 7), hello@sciar.example, and all pilot figures are fictional, created for NCI module H9LOCHFFT (2028 scenario). No external legal or regulatory claims are made on this page.
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById("pilotForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var email = document.getElementById("ownerEmail").value.trim();
+      if (!email) return;
+      document.getElementById("signupStatus").textContent =
+        "Prepared mailto draft to hello@sciar.example for " + email + ".";
+      window.location.href =
+        "mailto:hello@sciar.example?subject=" +
+        encodeURIComponent("Sciar Tips Enquiry from " + email) +
+        "&body=" +
+        encodeURIComponent("Hello Sciar team,\n\nI would like more information about Sciar Tips.\n\nContact email: " + email);
+    });
+  </script>
+</body>
+</html>
