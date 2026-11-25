@@ -1,9 +1,11 @@
 1. Link:
+   
 https://x26151171.github.io/sciar-html/
 
 https://github.com/x26151171/sciar-html/tree/main
 
-2.My Question:How can a mobile staff view surface hidden post-23:00 point rules and private concern traces while protecting individual colleague privacy and owner/visa sensitivities?
+2.My Question:
+How can a mobile staff view surface hidden post-23:00 point rules and private concern traces while protecting individual colleague privacy and owner/visa sensitivities?
 
 3. Parts 1 and 4a to 4c
 Part 1: The people
